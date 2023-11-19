@@ -10,6 +10,35 @@ workbook = Workbook("phonebook01.xlsx")
 workbook.save("phonebook01.xml")
 jpype.shutdownJVM()
 ```
+# convert excel to xml v2:
+```python
+from openpyxl import load_workbook
+import xml.etree.ElementTree as ET
+
+def excel_to_xml(excel_file, xml_file):
+    
+    wb = load_workbook(excel_file)
+    sheet = wb.active
+    
+    # Create the XML structure
+    root = ET.Element('data')
+    
+    for row in sheet.iter_rows(values_only=True):
+        record = ET.SubElement(root, 'record')
+        for value in row:
+            ET.SubElement(record, 'item').text = str(value) if value is not None else ''
+    
+    tree = ET.ElementTree(root)
+    
+    tree.write(xml_file, encoding='utf-8', xml_declaration=True)
+
+excel_input_file = 'input.xlsx'
+
+xml_output_file = 'output.xml'
+
+# Call the function to convert Excel to XML
+excel_to_xml(excel_input_file, xml_output_file)
+```
 # convert phonebook.xlsx to xml
 ```python
 import pandas as pd
@@ -47,3 +76,4 @@ xml_output_file = 'phonebook.xml'  # Replace with desired XML output file name
 tree.write(xml_output_file, encoding='utf-8', xml_declaration=True)
 ```
 
+#thanks for your time
